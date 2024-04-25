@@ -4,8 +4,14 @@
 #include "vec.h"
 
 typedef struct MATN {
-    int size;
-    vec elements[];
-} mat;
+    int rows;
+    int cols;
+    double complex** elements;
+} matn;
+
+typedef matn* mat;
+
+void print_mat(mat matrix);
+mat Mat(int rows, int cols);
 
 #endif

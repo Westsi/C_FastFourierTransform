@@ -12,5 +12,6 @@ typedef vecn* vec;
 void rand_vec(vec r);
 void print_vec(vec vector);
 vec Vec(int dimensions);
+vec py_range(int shape);
 
 #endif

@@ -8,19 +8,17 @@
 
 #define PI 3.1415926535
 
+void dft(vec x);
+
 int main(int argc, char** argv) {
     srand(time(NULL));
     printf("FFT\n");
-    vec v = Vec(1024);
+    vec v = Vec(3);
     rand_vec(v);
     print_vec(v);
-    mat m = Mat(2, 3);
-    // m->elements[row][col] = val;
-    m->elements[1][1] = 5678;
-    m->elements[0][1] = 6969;
-    print_mat(m);
+    dft(v);
+
     free(v);
-    free(m);
     return 0;
 }
 
@@ -39,6 +37,7 @@ void dft(vec x) {
 
     // n = np.arange(N)
     vec ranged = py_range(shape);
+    print_vec(ranged);
 
     // k = n.reshape((N, 1))
     // just changes from [0, 1, 2, ... n] to 
@@ -51,5 +50,19 @@ void dft(vec x) {
         .
         n]
     */
-   // which is not really necessary here as it can be read however we want
+   // which is not really necessary here as our vec can be read however we want
+
+    // M = np.exp(-2j * np.pi * k * n / N)
+    // for each value in the vector passed into it (-2I * PI * ranged * reshaped_range / shape)
+    double complex scalar = -2*I*PI;
+    printf("%f%+fi\n", crealf(scalar), cimagf(scalar));
+    mat ranged_mat = col_row_vec_mul(ranged, ranged);
+    mat_scal_mul(ranged_mat, scalar);
+    mat_scal_mul(ranged_mat, 1/(double complex) shape);
+    exp_mat(ranged_mat);
+    print_mat(ranged_mat);
+
+    // return np.dot(M, x)
+    vec r = mat_vec_dot(ranged_mat, x);
+    print_vec(r);
 }

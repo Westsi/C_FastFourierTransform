@@ -64,7 +64,7 @@ vec mat_vec_dot(mat m, vec v) {
     for (int i=0;i<m->rows;i++) {
         for (int j=0;j<m->cols;j++) {
             double complex val = v->elements[j] * m->elements[i][j];
-            printf("\t%f%+fi\n", crealf(val), cimagf(val));
+            // printf("\t%f%+fi\n", crealf(val), cimagf(val));
             r->elements[i] += val;
         }
     }   

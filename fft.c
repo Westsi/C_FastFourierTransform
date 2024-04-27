@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     // v->elements[1] = 4;
     // v->elements[2] = 6;
     // v->elements[3] = 8;
-    vec v = Vec(1024);
+    vec v = Vec(64);
     rand_vec(v);
 
     printf("Input vector:\n");
@@ -54,14 +54,13 @@ vec fft(vec x) {
                                 X_even + factor[N / 2:] * X_odd])
     */
     // N = x.shape[0]
-    print_vec(x);
     int shape = x->size;
     
     if (shape % 2 > 0) {
         printf("Size of vector must be a power of 2.");
         exit(1);
     }
-    if (shape <= 2) { //TODO: optimise this cutoff value
+    if (shape <= 16) { //TODO: optimise this cutoff value
         return dft(x);
     } else {
         // X_even = FFT(x[::2])

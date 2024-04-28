@@ -20,40 +20,72 @@ class Signal:
     def cosine(self):
         return self.amplitude*np.cos(2*np.pi*self.frequency*self.time_axis+self.phase)
 
-signal_1hz = Signal(amplitude=3, frequency=1, sampling_rate=200, duration=2)
-sine_1hz = signal_1hz.sine()
+# signal_1hz = Signal(amplitude=3, frequency=1, sampling_rate=200, duration=2)
+# sine_1hz = signal_1hz.sine()
 
-signal_10hz = Signal(amplitude=0.5, frequency=10, sampling_rate=200, duration=2)
-sine_10hz = signal_10hz.sine()
+# signal_10hz = Signal(amplitude=0.5, frequency=10, sampling_rate=200, duration=2)
+# sine_10hz = signal_10hz.sine()
 
-signal_20hz = Signal(amplitude=1, frequency=20, sampling_rate=200, duration=2)
-sine_20hz = signal_20hz.sine()
+# signal_20hz = Signal(amplitude=1, frequency=20, sampling_rate=200, duration=2)
+# sine_20hz = signal_20hz.sine()
 
-signal_39hz = Signal(amplitude=0.25, frequency=39, sampling_rate=200, duration=2)
-sine_39hz = signal_39hz.sine()
+# signal_39hz = Signal(amplitude=0.25, frequency=39, sampling_rate=200, duration=2)
+# sine_39hz = signal_39hz.sine()
 
 # signal = sine_1hz + sine_10hz + sine_20hz + sine_39hz
 
-signal = np.array(np.random.random(2000))
 sampling_rate = 200.0
+duration = 2
 
-fig, axs = plt.subplots(2)
+sig1 = Signal(amplitude=3, frequency=7, phase=0.35, sampling_rate=int(sampling_rate), duration=duration)
+sig2 = Signal(amplitude=1, frequency=10, phase=0.524, sampling_rate=int(sampling_rate), duration=duration)
+
+signal = sig1.sine() + sig2.sine()
+
+fig, axs = plt.subplots(nrows=2, ncols=2)
 fig.suptitle("Signal and FFT")
 
 timearray = [x/sampling_rate for x in range(0, len(signal))]
 
-axs[0].plot(timearray, signal, "b")
-axs[0].set(xlabel="Time [sec]", ylabel="Amplitude")
-axs[0].set_title("Sum of three signals")
+axs[0,0].plot(timearray, signal, "b")
+axs[0,0].set(xlabel="Time [sec]", ylabel="Amplitude")
+axs[0,0].set_title("Input signal")
 
 N = len(signal)
 fourier = np.fft.rfft(signal)
 
+threshold = max(np.abs(fourier))/10000
+thresholded_fourier = [(x if abs(x) > threshold else 0) for x in fourier]
+
 # print(fourier)
 frequency_axis = np.fft.rfftfreq(N, d=1.0/sampling_rate)
-norm_amplitude = 2*np.abs(fourier)/N
+norm_amplitude = 2*np.abs(thresholded_fourier)/N
 
-axs[1].plot(frequency_axis, norm_amplitude)
-axs[1].set(xlabel="Frequency[Hz]", ylabel="Amplitude")
-axs[1].set_title("Spectrum")
+phase = [(x+90 if x != 0 else 0) for x in np.angle(thresholded_fourier, deg=True)]
+
+axs[1,0].plot(frequency_axis, norm_amplitude)
+axs[1,0].set(xlabel="Frequency[Hz]", ylabel="Amplitude")
+axs[1,0].set_title("Spectrum")
+
+axs[0,1].plot(frequency_axis, phase)
+axs[0,1].set(xlabel="Frequency[Hz]", ylabel="Phase shift of waves (degrees)")
+axs[0,1].set_title("Phase")
+
+resignal = np.array([0.0 for _ in range(int(sampling_rate*duration))])
+for i in range(len(thresholded_fourier)):
+    if thresholded_fourier[i] == 0:
+        continue
+
+    amp = 2*abs(thresholded_fourier[i])/N
+    phase = np.angle(thresholded_fourier[i], deg=True) + 90
+    freq = frequency_axis[i]
+    print(f"Found signal with amplitude {amp}, phase {phase} and frequency {freq}")
+    sig = Signal(amplitude=amp, frequency=freq, phase=phase, sampling_rate=sampling_rate, duration=duration)
+    resignal += sig.sine()
+
+
+axs[1,1].plot(timearray, resignal, "b")
+axs[1,1].set(xlabel="Time [sec]", ylabel="Amplitude")
+axs[1,1].set_title("Reverse engineered signal")
+
 plt.show()

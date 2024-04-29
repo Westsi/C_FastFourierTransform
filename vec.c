@@ -116,7 +116,6 @@ vec load_vec(char* filename) {
     vec r = Vec(lines);
     int i = 0;
     while (fgets(buf, 1024, fptr)) {
-        printf("Got value %s", buf);
         double complex val = 0;
         char* startptr = &buf[0];
         char* endptr = NULL;

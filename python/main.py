@@ -46,7 +46,7 @@ with open("signal.txt", "w") as f:
     for val in signal:
         imag_str = "+" if (np.imag(val) >= 0) else ""
         imag_str += str(np.imag(val))
-        f.write(str(np.real(val)) + imag_str + "\n")
+        f.write(str(np.real(val)) + imag_str + "j\n")
 
 fig, axs = plt.subplots(nrows=2, ncols=2)
 fig.suptitle("Signal and FFT")

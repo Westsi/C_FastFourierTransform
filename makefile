@@ -1,4 +1,4 @@
-CFILES:=$(shell find -L . -type f -name '*.c')
+CFILES:=$(shell find -L . -type f -name '*.c' | grep -v "./python/")
 .PHONY: all clean
 
 all: clean

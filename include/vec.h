@@ -20,4 +20,6 @@ vec vec_add(vec f, vec s);
 vec vec_concat(vec f, vec s);
 void vec_exp(vec v);
 
+vec load_vec(char* filename);
+
 #endif

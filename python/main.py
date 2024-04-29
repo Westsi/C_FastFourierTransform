@@ -34,13 +34,19 @@ class Signal:
 
 # signal = sine_1hz + sine_10hz + sine_20hz + sine_39hz
 
-sampling_rate = 200.0
+sampling_rate = 128.0
 duration = 2
 
 sig1 = Signal(amplitude=3, frequency=7, phase=0.35, sampling_rate=int(sampling_rate), duration=duration)
 sig2 = Signal(amplitude=1, frequency=10, phase=0.524, sampling_rate=int(sampling_rate), duration=duration)
 
 signal = sig1.sine() + sig2.sine()
+
+with open("signal.txt", "w") as f:
+    for val in signal:
+        imag_str = "+" if (np.imag(val) >= 0) else ""
+        imag_str += str(np.imag(val))
+        f.write(str(np.real(val)) + imag_str + "\n")
 
 fig, axs = plt.subplots(nrows=2, ncols=2)
 fig.suptitle("Signal and FFT")

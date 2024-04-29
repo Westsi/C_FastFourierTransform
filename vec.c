@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "vec.h"
 
@@ -96,4 +97,38 @@ void vec_exp(vec v) {
     for (int i=0;i<v->size;i++) {
         v->elements[i] = cexp(v->elements[i]);
     }
+}
+
+vec load_vec(char* filename) {
+    FILE *fptr;
+    fptr = fopen(filename, "r");
+    if (fptr == NULL) {
+        printf("File %s does not exist.\n", filename);
+        exit(1);
+    }
+    int lines = 0;
+    char buf[1024];
+    while (fgets(buf, 1024, fptr)) { // lines should never be more than 1024 characters
+        lines++;
+    }
+    fseek(fptr, 0, SEEK_SET);
+
+    vec r = Vec(lines);
+    int i = 0;
+    while (fgets(buf, 1024, fptr)) {
+        printf("Got value %s", buf);
+        double complex val = 0;
+        char* startptr = &buf[0];
+        char* endptr = NULL;
+        val += strtod(startptr, &endptr);
+        if (startptr == endptr) {
+            continue;
+        }
+        startptr = endptr;
+        endptr = NULL;
+        val += I * strtod(startptr, &endptr);
+        r->elements[i] = val;
+        i++;
+    }
+    return r;
 }

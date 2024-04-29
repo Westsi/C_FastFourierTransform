@@ -19,8 +19,9 @@ int main(int argc, char** argv) {
     // v->elements[1] = 4;
     // v->elements[2] = 6;
     // v->elements[3] = 8;
-    vec v = Vec(64);
-    rand_vec(v);
+    // vec v = Vec(64);
+    // rand_vec(v);
+    vec v = load_vec("signal.txt");
 
     printf("Input vector:\n");
     print_vec(v);

@@ -2,6 +2,7 @@
 #include <complex.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "mat.h"
 #include "vec.h"
@@ -10,6 +11,8 @@
 
 vec fft(vec x);
 vec dft(vec x);
+void find_signals(vec fourier, double sampling_rate);
+vec fft_freq(int window, double spacing);
 
 int main(int argc, char** argv) {
     srand(time(NULL));
@@ -21,6 +24,7 @@ int main(int argc, char** argv) {
     // v->elements[3] = 8;
     // vec v = Vec(64);
     // rand_vec(v);
+
     vec v = load_vec("signal.txt");
 
     printf("Input vector:\n");
@@ -32,9 +36,76 @@ int main(int argc, char** argv) {
     print_vec(r);
     printf("Size of output: %d\n", r->size);
 
+    find_signals(r, 128.0);
+
     free(v);
     free(r);
     return 0;
+}
+
+void find_signals(vec fourier, double sampling_rate) {
+    // calculate threshold
+    double threshold = 0;
+    for (int i=0;i<fourier->size;i++) {
+        if (cabs(fourier->elements[i]) > threshold) {
+            threshold = cabs(fourier->elements[i]);
+        }
+    }
+    threshold /= 10000;
+
+    vec frequencies = fft_freq(fourier->size, 1/sampling_rate);
+
+    // zero all values less than threshold in v
+    for (int i=0;i<fourier->size;i++) {
+        if (cabs(fourier->elements[i]) < threshold) {
+            continue;
+        }
+        double complex el = fourier->elements[i];
+
+        double amp = 2*cabs(el)/fourier->size;
+
+        // convert received angle to degrees and add 90 to get the correct value
+        double phase_angle = (atan(cimag(el)/creal(el))*180/PI) + 90;
+
+        // I don't know if this can be relied upon to be true!
+        // seems to work in all tests i've done - but IDK if it is proved that it always is
+        double freq = creal(frequencies->elements[i]);
+        // check if frequency is negative - if so, do not print as positive one will be printed
+        if (freq < 0) {
+            continue;
+        }
+        printf("Found signal with amplitude %f, phase angle %f°, and frequency %f\n", amp, phase_angle, freq);
+    }
+
+
+}
+
+vec fft_freq(int window, double spacing) {
+    // spacing is 1/sampling rate
+    if (window % 2 == 0) {
+        vec first_half = py_range(((int) window/2));
+        vec second_half = Vec((int) window/2);
+        int i = 0;
+        for (int j=(int)-window/2;j<=-1;j++,i++) {
+            second_half->elements[i] = j;
+        }
+        vec r = vec_concat(first_half, second_half);
+        free(first_half);
+        free(second_half);
+        vec_scal_mul(r, 1/(window*spacing)); // divided by spacing*window
+        return r;
+    }
+    vec first_half = py_range((int) (window-1)/2);
+    vec second_half = Vec((int) window/2);
+    int i = 0;
+    for (int j=(int)-(window-1)/2;j<=-1;j++,i++) {
+        second_half->elements[i] = j;
+    }
+    vec r = vec_concat(first_half, second_half);
+    free(first_half);
+    free(second_half);
+    vec_scal_mul(r, 1/(window*spacing)); // divided by spacing*window
+    return r;
 }
 
 vec fft(vec x) {

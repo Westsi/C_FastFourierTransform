@@ -17,14 +17,6 @@ vec fft_freq(int window, double spacing);
 int main(int argc, char** argv) {
     srand(time(NULL));
 
-    // vec v = Vec(4);
-    // v->elements[0] = 2;
-    // v->elements[1] = 4;
-    // v->elements[2] = 6;
-    // v->elements[3] = 8;
-    // vec v = Vec(64);
-    // rand_vec(v);
-
     vec v = load_vec("signal.txt");
 
     printf("Input vector:\n");

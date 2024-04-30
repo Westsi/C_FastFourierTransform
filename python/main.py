@@ -37,8 +37,8 @@ class Signal:
 sampling_rate = 128.0
 duration = 2
 
-sig1 = Signal(amplitude=3, frequency=7, phase=0.35, sampling_rate=int(sampling_rate), duration=duration)
-sig2 = Signal(amplitude=1, frequency=10, phase=0.524, sampling_rate=int(sampling_rate), duration=duration)
+sig1 = Signal(amplitude=4, frequency=3, phase=20*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig2 = Signal(amplitude=1, frequency=10, phase=30*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 
 signal = sig1.sine() + sig2.sine()
 
@@ -86,7 +86,7 @@ for i in range(len(thresholded_fourier)):
     phase = np.angle(thresholded_fourier[i], deg=True) + 90
     freq = frequency_axis[i]
     print(f"Found signal with amplitude {amp}, phase {phase} and frequency {freq}")
-    sig = Signal(amplitude=amp, frequency=freq, phase=phase, sampling_rate=sampling_rate, duration=duration)
+    sig = Signal(amplitude=amp, frequency=freq, phase=(((phase-90)*np.pi/180)+np.pi/2), sampling_rate=sampling_rate, duration=duration)
     resignal += sig.sine()
 
 

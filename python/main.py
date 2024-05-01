@@ -39,8 +39,9 @@ duration = 2
 
 sig1 = Signal(amplitude=4, frequency=3, phase=20*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 sig2 = Signal(amplitude=1, frequency=10, phase=30*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig3 = Signal(amplitude=2, frequency=8, phase=10*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 
-signal = sig1.sine() + sig2.sine()
+signal = sig1.sine() + sig2.sine() + sig3.sine()
 
 with open("signal.txt", "w") as f:
     for val in signal:

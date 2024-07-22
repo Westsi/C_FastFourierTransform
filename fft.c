@@ -6,6 +6,7 @@
 
 #include "mat.h"
 #include "vec.h"
+#include "mic.h"
 
 #define PI 3.1415926535
 
@@ -15,6 +16,10 @@ void find_signals(vec fourier, double sampling_rate);
 vec fft_freq(int window, double spacing);
 
 int main(int argc, char** argv) {
+    // AudioObjectID* micdata = malloc(sizeof(AudioObjectID)*128);
+    // defaultMicrophone(micdata);
+    record();
+
     srand(time(NULL));
 
     vec v = load_vec("signal.txt");

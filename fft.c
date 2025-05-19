@@ -18,7 +18,7 @@ vec fft_freq(int window, double spacing);
 int main(int argc, char** argv) {
     // AudioObjectID* micdata = malloc(sizeof(AudioObjectID)*128);
     // defaultMicrophone(micdata);
-    record();
+    // record();
 
     srand(time(NULL));
 
@@ -37,6 +37,19 @@ int main(int argc, char** argv) {
 
     free(v);
     free(r);
+    // mat mz = Mat(2, 2);
+    // mz->elements[0][0] = 1;
+    // mz->elements[0][1] = 5;
+    // mz->elements[1][0] = -2;
+    // mz->elements[1][1] = 4;
+    // vec vz = Vec(2);
+    // vz->elements[0] = 3;
+    // vz->elements[1] = 7;
+    // vec tz = mat_vec_dot(mz, vz);
+    // print_vec(tz);
+    // free(mz);
+    // free(vz);
+    // free(tz);
     return 0;
 }
 
@@ -213,7 +226,8 @@ vec dft(vec x) {
     mat ranged_mat = col_row_vec_mul(ranged, ranged);
     mat_scal_mul(ranged_mat, scalar);
     exp_mat(ranged_mat);
-    // print_mat(ranged_mat);
+    printf("THING");
+    print_mat(ranged_mat);
 
     // return np.dot(M, x)
     vec r = mat_vec_dot(ranged_mat, x);

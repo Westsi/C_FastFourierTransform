@@ -59,6 +59,12 @@ void exp_mat(mat m) {
 }
 
 vec mat_vec_dot(mat m, vec v) {
+    /*
+    m = [a, b]
+        [c, d]
+    v = [x, y]
+    m dot v = [ax+by, cx+dy]
+    */
     int rows = m->rows;
     vec r = Vec(rows);
     for (int i=0;i<m->rows;i++) {

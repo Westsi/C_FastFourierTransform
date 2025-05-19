@@ -38,10 +38,12 @@ sampling_rate = 128.0
 duration = 2
 
 sig1 = Signal(amplitude=4, frequency=3, phase=20*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
-sig2 = Signal(amplitude=1, frequency=10, phase=30*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
-sig3 = Signal(amplitude=2, frequency=8, phase=10*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig2 = Signal(amplitude=1, frequency=10, phase=37*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig3 = Signal(amplitude=3, frequency=23, phase=13*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig4 = Signal(amplitude=6, frequency=18, phase=110*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig5 = Signal(amplitude=2, frequency=39, phase=82*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 
-signal = sig1.sine() + sig2.sine() + sig3.sine()
+signal = sig1.sine() + sig2.sine() + sig3.sine() + sig4.sine() + sig5.sine()
 
 with open("signal.txt", "w") as f:
     for val in signal:

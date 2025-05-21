@@ -34,16 +34,17 @@ class Signal:
 
 # signal = sine_1hz + sine_10hz + sine_20hz + sine_39hz
 
-sampling_rate = 128.0
+sampling_rate = 256.0
 duration = 2
 
 sig1 = Signal(amplitude=4, frequency=3, phase=20*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 sig2 = Signal(amplitude=1, frequency=10, phase=37*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
-sig3 = Signal(amplitude=3, frequency=23, phase=13*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
-sig4 = Signal(amplitude=6, frequency=18, phase=110*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
-sig5 = Signal(amplitude=2, frequency=39, phase=82*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+# sig3 = Signal(amplitude=3, frequency=23, phase=13*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+# sig4 = Signal(amplitude=6, frequency=18, phase=110*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
+sig5 = Signal(amplitude=2, frequency=120, phase=82*np.pi/180, sampling_rate=int(sampling_rate), duration=duration)
 
-signal = sig1.sine() + sig2.sine() + sig3.sine() + sig4.sine() + sig5.sine()
+# signal = sig1.sine() + sig2.sine() + sig3.sine() + sig4.sine() + sig5.sine()
+signal = sig1.sine() + sig2.sine() + sig5.sine()
 
 with open("signal.txt", "w") as f:
     for val in signal:
@@ -89,8 +90,11 @@ for i in range(len(thresholded_fourier)):
     phase = np.angle(thresholded_fourier[i], deg=True) + 90
     freq = frequency_axis[i]
     print(f"Found signal with amplitude {amp}, phase {phase} and frequency {freq}")
-    sig = Signal(amplitude=amp, frequency=freq, phase=(((phase-90)*np.pi/180)+np.pi/2), sampling_rate=sampling_rate, duration=duration)
-    resignal += sig.sine()
+    if freq > 100:
+        continue
+    else:
+        sig = Signal(amplitude=amp, frequency=freq, phase=(((phase-90)*np.pi/180)+np.pi/2), sampling_rate=sampling_rate, duration=duration)
+        resignal += sig.sine()
 
 
 axs[1,1].plot(timearray, resignal, "b")
